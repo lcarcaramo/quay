@@ -16,7 +16,7 @@ ENV QUAYPATH "."
 RUN mkdir $QUAYDIR
 WORKDIR $QUAYDIR
 RUN INSTALL_PKGS="\
-        python3.6\
+        python3.6 \
         nginx \
         openldap \
         gcc-c++ git \
