@@ -1,4 +1,5 @@
 FROM quay.io/ibmz/fedora-s390x:34
+LABEL maintainer "thomasmckay@redhat.com"
 
 ENV OS=linux \
     ARCH=s390x \
@@ -9,16 +10,13 @@ ENV OS=linux \
     LC_ALL=C.UTF-8 \
     LANG=C.UTF-8 \
     PIP_NO_CACHE_DIR=off
-
 ENV QUAYDIR /quay-registry
 ENV QUAYCONF /quay-registry/conf
 ENV QUAYPATH "."
-
 RUN mkdir $QUAYDIR
 WORKDIR $QUAYDIR
-
 RUN INSTALL_PKGS="\
-        python3 \
+        python3.6\
         nginx \
         openldap \
         gcc-c++ git \
@@ -33,12 +31,12 @@ RUN INSTALL_PKGS="\
     yum -y --setopt=tsflags=nodocs --setopt=skip_missing_names_on_install=False install $INSTALL_PKGS && \
     yum -y update && \
     yum -y clean all
-
 COPY . .
-
 RUN yum install -y python3-devel libpq-devel  openssl-devel libjpeg-devel libffi-devel gpgme-devel 
-
-RUN rm /usr/bin/python && ln -s /usr/bin/python3 /usr/bin/python && \
+RUN ln -s /usr/bin/python3.6 /usr/bin/python && \
+    curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
+    python get-pip.py && \
+    rm get-pip.py && \
     python -m pip install --upgrade setuptools==45 pip && \
     python -m pip install -r requirements.txt --no-cache && \
     python -m pip freeze && \
