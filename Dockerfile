@@ -19,7 +19,7 @@ RUN INSTALL_PKGS="\
         python3.6 \
         nginx \
         openldap \
-        gcc-c++ git \
+        gcc-c++ make git \
         openldap-devel \
         python3-devel \
         python3-gpg \
