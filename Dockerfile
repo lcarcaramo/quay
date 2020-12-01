@@ -33,7 +33,7 @@ RUN INSTALL_PKGS="\
     yum -y clean all
 COPY . .
 RUN yum install -y python3-devel libpq-devel  openssl-devel libjpeg-devel libffi-devel gpgme-devel 
-RUN ln -s /usr/bin/python3.6 /usr/bin/python && \
+RUN ls -al /usr/bin && ln -s /usr/bin/python3.6 /usr/bin/python && \
     curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
     python get-pip.py && \
     rm get-pip.py && \
