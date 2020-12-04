@@ -78,13 +78,13 @@ suite_start
                 print_info "Waiting for Quay's PostgreSQL database to be ready..."
                 wait_until_ready 10
                 print_info "Creating pg_trgm; extension in Quay's PostgreSQL database"
-                docker exec -it --user postgres quay-postgres psql -d postgres -c "create extension pg_trgm;"
+                docker exec --user postgres quay-postgres psql -d postgres -c "create extension pg_trgm;"
 
                 print_info "Create Quay image with config file..."
                 build "configured-quay"
 
                 print_info "Start quay..."
-                docker run --name configured-quay --link quay-redis --link quay-postgres -p 8443:8443 -p 8080:8080 -v quay-storage:/datastorage -d "configured-quay"
+                docker run --name configured-quay --link quay-redis --link quay-postgres -p 8443:8443 -p 8080:8080 -d "configured-quay"
                 print_info "Waiting for Quay to be ready..."
                 wait_until_ready 60
 
