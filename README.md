@@ -5,7 +5,7 @@
 
 # Project Quay
 
-![Project Quay Logo](project_quay_logo.png)
+![Project Quay Logo](https://github.com/quay/quay/blob/master/project_quay_logo.png)
 
 Project Quay builds, stores, and distributes your container images.
 
