@@ -1,12 +1,9 @@
+# Tags
+> _Built from [`quay.io/ibmz/fedora:32`](https://quay.io/repository/ibmz/fedora?tab=info)_
+-	`solo` - [![Build Status](https://travis-ci.com/lcarcaramo/quay.svg?branch=solo-s390x)](https://travis-ci.com/lcarcaramo/quay)
+### __[Original Source Code](https://github.com/quay/quay)__
+
 # Project Quay
-
-![CI](https://github.com/quay/quay/workflows/CI/badge.svg?branch=master)
-[![Container Repository on Quay](https://quay.io/repository/projectquay/quay/status "Container Repository on Quay")](https://quay.io/repository/projectquay/quay)
-
-:warning: The `master` branch may be in an *unstable or even broken state* during development.
-Please use [releases] instead of the `master` branch in order to get stable software.
-
-[releases]: https://github.com/quay/quay/releases
 
 ![Project Quay Logo](project_quay_logo.png)
 
@@ -45,59 +42,73 @@ High-level features include:
 [Clair]: https://github.com/quay/clair
 [Swagger]: http://swagger.io
 
-## Getting Started
+# How to use this image
 
-* Explore a live instance of Project Quay hosted at [Quay.io]
-* Watch [talks] given about Project Quay
-* Review the [documentation] for Red Hat Quay
-* Get up and running with a containerized [development environment]
+* Start a [Redis](https://quay.io/repository/ibmz/redis) container from the `quay.io/ibmz/redis` image.
+> _See the [`quay.io/ibmz/redis`](https://quay.io/repository/ibmz/redis) documentation for infromation about data persistance._
+```console
+$ docker run --name quay-redis -d -p 6379:6379 quay.io/ibmz/redis:6.0
+```
 
-[Quay.io]: https://quay.io
-[talks]: /docs/talks.md
-[documentation]: https://access.redhat.com/documentation/en-us/red_hat_quay
-[development environment]: /docs/development-container.md
+* Start a [PostgreSQL](https://quay.io/repository/ibmz/postgres) container from the `quay.io/ibmz/postgres` image.
+> _See the [`quay.io/ibmz/postgres`](https://quay.io/repository/ibmz/postgres) documentation for infromation about data persistance._
+```console
+$ docker run --name quay-postgres -e POSTGRES_PASSWORD=<password> -d -p 5432:5432 quay.io/ibmz/postgres:13
+```
 
-## Community
+* Wait about __10 seconds__ for PostgreSQL to be ready, and then make sure that PostgreSQL has the `pg_trgm` extension.
+```console
+$ docker exec --user postgres quay-postgres psql -d postgres -c "create extension pg_trgm;"
+```
 
-* Mailing List: [quay-sig@googlegroups.com]
-* IRC: #quay on [freenode.net]
-* Bug tracking: [JBoss JIRA]
-* Security Issues: [security@redhat.com]
+* Create Docker volumes for the __Quay config file__ and __Quay's persistant storage__.
+```console
+$ docker volume create quay-config
+quay-config
+$ docker volume create quay-storage
+quay-storage
+```
 
-[quay-sig@googlegroups.com]: https://groups.google.com/forum/#!forum/quay-sig
-[freenode.net]: https://webchat.freenode.net
-[JBoss JIRA]: https://issues.jboss.org/projects/PROJQUAY
-[security@redhat.com]: mailto:security@redhat.com
+* Start a container from the `quay.io/ibmz/quay` image in _"config mode"_.
+```console
+$ docker run --name configure-quay -d \ 
+>            -p 8443:8443 \
+>            -p 8080:8080 \
+>            -v quay-storage:/datastorage \ 
+>            quay.io/ibmz/quay:solo config <password>
+```
 
-## Quay Bug Bash!
+* From a web browser, sign into the __Quay configureation web UI__.
+  * `http://<host/ip where quay is running>:8080`
+  
+* Follow [Chapter 4](https://access.redhat.com/documentation/en-us/red_hat_quay/3.3/html/deploy_red_hat_quay_-_basic/configuring_red_hat_quay) of [Deploy Red Hat Quay - Basic](https://access.redhat.com/documentation/en-us/red_hat_quay/3.3/html/deploy_red_hat_quay_-_basic/index) in the [Red Hat Quay Documentation](https://access.redhat.com/documentation/en-us/red_hat_quay/3.3/) to generate your __Quay config file__.
 
-From July 13, 2020 through August 14, 2020, Project Quay is having a Bug Bash.  We have migrated Quay from python 2 to python 3 in our master branch.  This means nearly every line of code in Quay has been touched so our risk of regression bugs is high.  We need *your* help to help find them!
+* Extract `config.yaml` from `quay-config.tar.gz`, and place `config.yaml` in the `quay-config` volume that you created earlier.
+```console
+$ tar -xzvf quay-config.tar.gz
+config.yaml
+```
 
-### How Do I Participate?
+* Remove the `configure-quay` container.
+```console
+$ docker rm -f configure-quay
+```
 
-Just grab the Quay registry codebase (quay, quay-builder), checkout master branch, build a local copy and start testing!  If you find an issue, please raise a [JIRA] or (even better) raise [a pull request].  We are considering all community contributions against master during this time period as counting towards the Bug Bash.
+* Start a Quay container from the `quay.io/ibmz/quay` image. _(Not in config mode this time)_
+```console
+$ docker run --name quay -d\
+>            -p 8443:8443 \
+>            -p 8080:8080 \
+>            -v quay-config:/conf/stack:Z \
+>            -v quay-storage:/datastorage \
+>            quay.io/ibmz/quay:solo
+```
 
-[JIRA]: https://issues.redhat.com/projects/PROJQUAY/summary
-[a pull request]: https://github.com/quay/quay/pulls
+* Wait about __a minute__ for Quay to be ready, and then view the __Quay web UI__ at the host/ip that you configured earlier to verify that Quay is working.
 
-### What's in it for me?
+* See the [Red Hat Quay Documentation](https://access.redhat.com/documentation/en-us/red_hat_quay/3.3/) for more details on how to use Quay.
 
-Aside from the peace of mind that you've helped to make Quay a better code base, we're prepared to offer you some Project Quay swag- an official Project Quay t-shirt!
-
-* Submit a pull request?  We'll send you a t-shirt.
-* Find three (3) new bugs and submit JIRA tickets for each?  We'll send you a t-shirt.
-
-In addition, we will be tracking community involvement on our [Bug Bash Leaderboard] so you can get the credit for your work.
-
-[Bug Bash Leaderboard]: https://docs.google.com/spreadsheets/d/1NhMcaS49jUk0IElTnXYkvfLckjv3GKr9pQWf3ejYcf4/edit#gid=0
-
-### Have a Question?
-
-Check out our [Bug Bash FAQ].
-
-[Bug Bash FAQ]: https://docs.google.com/document/d/1dGvTGDA3KGxOTUkql3w0NC7j_Cf_VeSUTXPxg6lxH5U/edit?ts=5f03355b
-
-## License
+# License
 
 Project Quay is under the Apache 2.0 license.
-See the LICENSE file for details.
+See the [LICENSE](https://github.com/quay/quay/blob/master/LICENSE) for details.
