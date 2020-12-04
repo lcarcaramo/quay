@@ -74,7 +74,7 @@ suite_start
                 docker run --name quay-redis -d quay.io/ibmz/redis:6.0
 
                 print_info "Starting Quay's PostgreSQL database..."
-                docker run --name quay-postgres -e POSTGRES_PASSWORD=password -d postgres
+                docker run --name quay-postgres -e POSTGRES_PASSWORD=password -d postgres:13
                 print_info "Waiting for Quay's PostgreSQL database to be ready..."
                 wait_until_ready 10
                 print_info "Creating pg_trgm; extension in Quay's PostgreSQL database"
