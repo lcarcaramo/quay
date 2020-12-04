@@ -1,5 +1,5 @@
 # Tags
-> _Built from [`quay.io/ibmz/fedora:32`](https://quay.io/repository/ibmz/fedora?tab=info)_
+> _Built from [`quay.io/ibmz/fedora-s390x:32`](https://quay.io/repository/ibmz/fedora?tab=info)_
 -	`solo` - [![Build Status](https://travis-ci.com/lcarcaramo/quay.svg?branch=solo-s390x)](https://travis-ci.com/lcarcaramo/quay)
 ### __[Original Source Code](https://github.com/quay/quay)__
 
