@@ -99,7 +99,7 @@ $ docker rm -f configure-quay
 $ docker run --name quay -d\
 >            -p 8443:8443 \
 >            -p 8080:8080 \
->            -v quay-config:/conf/stack:Z \
+>            -v quay-config:/conf/stack \
 >            -v quay-storage:/datastorage \
 >            quay.io/ibmz/quay:solo
 ```
