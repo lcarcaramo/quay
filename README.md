@@ -1,5 +1,5 @@
 # Tags
-> _Built from [`quay.io/ibmz/fedora-s390x:32`](https://quay.io/repository/ibmz/fedora?tab=info)_
+> _Built from [`quay.io/ibm/fedora-s390x:32`](https://quay.io/repository/ibm/fedora?tab=info)_
 -	`solo` - [![Build Status](https://travis-ci.com/lcarcaramo/quay.svg?branch=solo-s390x)](https://travis-ci.com/lcarcaramo/quay)
 ### __[Original Source Code](https://github.com/quay/quay)__
 
@@ -44,16 +44,16 @@ High-level features include:
 
 # How to use this image
 
-* Start a [Redis](https://quay.io/repository/ibmz/redis) container from the `quay.io/ibmz/redis` image.
-> _See the [`quay.io/ibmz/redis`](https://quay.io/repository/ibmz/redis) documentation for infromation about data persistance._
+* Start a [Redis](https://quay.io/repository/ibmz/redis) container from the `quay.io/ibm/redis` image.
+> _See the [`quay.io/ibm/redis`](https://quay.io/repository/ibm/redis) documentation for infromation about data persistance._
 ```console
-$ docker run --name quay-redis -d -p 6379:6379 quay.io/ibmz/redis:6.0
+$ docker run --name quay-redis -d -p 6379:6379 quay.io/ibm/redis:6.0
 ```
 
-* Start a [PostgreSQL](https://quay.io/repository/ibmz/postgres) container from the `quay.io/ibmz/postgres` image.
-> _See the [`quay.io/ibmz/postgres`](https://quay.io/repository/ibmz/postgres) documentation for infromation about data persistance._
+* Start a [PostgreSQL](https://quay.io/repository/ibm/postgres) container from the `quay.io/ibm/postgres` image.
+> _See the [`quay.io/ibm/postgres`](https://quay.io/repository/ibm/postgres) documentation for infromation about data persistance._
 ```console
-$ docker run --name quay-postgres -e POSTGRES_PASSWORD=<password> -d -p 5432:5432 quay.io/ibmz/postgres:13
+$ docker run --name quay-postgres -e POSTGRES_PASSWORD=<password> -d -p 5432:5432 quay.io/ibm/postgres:13
 ```
 
 * Wait about __10 seconds__ for PostgreSQL to be ready, and then make sure that PostgreSQL has the `pg_trgm` extension.
@@ -69,13 +69,13 @@ $ docker volume create quay-storage
 quay-storage
 ```
 
-* Start a container from the `quay.io/ibmz/quay` image in _"config mode"_.
+* Start a container from the `quay.io/ibm/quay` image in _"config mode"_.
 ```console
 $ docker run --name configure-quay -d \ 
 >            -p 8443:8443 \
 >            -p 8080:8080 \
 >            -v quay-storage:/datastorage \ 
->            quay.io/ibmz/quay:solo config <password>
+>            quay.io/ibm/quay:solo config <password>
 ```
 
 * From a web browser, sign into the __Quay configureation web UI__.
@@ -94,14 +94,14 @@ config.yaml
 $ docker rm -f configure-quay
 ```
 
-* Start a Quay container from the `quay.io/ibmz/quay` image. _(Not in config mode this time)_
+* Start a Quay container from the `quay.io/ibm/quay` image. _(Not in config mode this time)_
 ```console
 $ docker run --name quay -d\
 >            -p 8443:8443 \
 >            -p 8080:8080 \
 >            -v quay-config:/conf/stack \
 >            -v quay-storage:/datastorage \
->            quay.io/ibmz/quay:solo
+>            quay.io/ibm/quay:solo
 ```
 
 * Wait about __a minute__ for Quay to be ready, and then view the __Quay web UI__ at the host/ip that you configured earlier to verify that Quay is working.
