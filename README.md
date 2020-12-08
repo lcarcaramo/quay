@@ -44,7 +44,7 @@ High-level features include:
 
 # How to use this image
 
-* Start a [Redis](https://quay.io/repository/ibmz/redis) container from the `quay.io/ibm/redis` image.
+* Start a [Redis](https://quay.io/repository/ibm/redis) container from the `quay.io/ibm/redis` image.
 > _See the [`quay.io/ibm/redis`](https://quay.io/repository/ibm/redis) documentation for infromation about data persistance._
 ```console
 $ docker run --name quay-redis -d -p 6379:6379 quay.io/ibm/redis:6.0
