@@ -33,8 +33,8 @@ RUN INSTALL_PKGS="\
     yum -y clean all
 COPY . .
 RUN yum install -y python3-devel libpq-devel  openssl-devel libjpeg-devel libffi-devel gpgme-devel 
-RUN ln -s /usr/bin/python3 /usr/bin/python && \
-    python -m pip install --upgrade setuptools==45 pip && \
+#RUN ln -s /usr/bin/python3 /usr/bin/python && \
+RUN python -m pip install --upgrade setuptools==45 pip && \
     python -m pip install -r requirements.txt --no-cache && \
     python -m pip freeze && \
     mkdir -p $QUAYDIR/static/webfonts && \
