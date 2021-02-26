@@ -71,10 +71,10 @@ suite_end () {
 suite_start
         print_test_case "It starts successfully:"
                 print_info "Starting Quay's Redis key value store..."
-                docker run --name quay-redis -d quay.io/ibmz/redis:6.0
+                docker run --name quay-redis -d quay.io/ibm/redis:6.0
 
                 print_info "Starting Quay's PostgreSQL database..."
-                docker run --name quay-postgres -e POSTGRES_PASSWORD=password -d postgres:13
+                docker run --name quay-postgres -e POSTGRES_PASSWORD=password -d quay.io/ibm/postgres:13
                 print_info "Waiting for Quay's PostgreSQL database to be ready..."
                 wait_until_ready 10
                 print_info "Creating pg_trgm; extension in Quay's PostgreSQL database"
