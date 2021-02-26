@@ -1,4 +1,4 @@
-FROM quay.io/ibmz/fedora-s390x:32
+FROM quay.io/ibm/fedora-s390x:32
 LABEL maintainer "thomasmckay@redhat.com"
 ENV OS=linux \
     ARCH=s390x \
